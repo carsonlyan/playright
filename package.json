@@ -1,24 +1,27 @@
 {
-  "name": "playright",
-  "version": "1.0.0",
-  "main": "index.js",
-  "repository": "https://github.com/carsonlyan/playright",
-  "author": "Qun",
-  "license": "MIT",
-  "dependencies": {
-    "@playwright/test": "^1.22.2",
-    "typescript": "^4.7.3"
-  },
-  "devDependencies": {
-    "eslint": "^8.17.0",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-import-resolver-typescript": "^2.7.1",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jsx-a11y": "^6.5.1",
-    "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-react": "^7.30.0",
-    "eslint-plugin-react-hooks": "^4.5.0",
-    "prettier": "^2.6.2"
-  }
+    "name": "playright",
+    "version": "1.0.0",
+    "main": "index.js",
+    "repository": "https://github.com/carsonlyan/playright",
+    "author": "Qun",
+    "license": "MIT",
+    "scripts": {
+        "test": "npx playwright test"
+    },
+    "dependencies": {
+        "@playwright/test": "^1.22.2",
+        "typescript": "^4.7.3"
+    },
+    "devDependencies": {
+        "eslint": "^8.17.0",
+        "eslint-config-airbnb": "^19.0.4",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-import-resolver-typescript": "^2.7.1",
+        "eslint-plugin-import": "^2.26.0",
+        "eslint-plugin-jsx-a11y": "^6.5.1",
+        "eslint-plugin-prettier": "^4.0.0",
+        "eslint-plugin-react": "^7.30.0",
+        "eslint-plugin-react-hooks": "^4.5.0",
+        "prettier": "^2.6.2"
+    }
 }
