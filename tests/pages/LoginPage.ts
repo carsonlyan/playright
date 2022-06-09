@@ -1,6 +1,7 @@
 import { Page } from '@playwright/test';
 
 import { BasePage } from './BasePage';
+import HomePage from './HomePage';
 
 class LoginPage extends BasePage {
     private _loginButtonSelector = 'button:has-text("LOGIN")';
@@ -13,8 +14,8 @@ class LoginPage extends BasePage {
         super(page);
     }
 
-    public async run(): Promise<void> {
-        await this.page.locator(this._loginButtonSelector).click();
+    public async login(): Promise<HomePage> {
+        // await this.page.locator(this._loginButtonSelector).click();
         const userNameInput = this.page.locator(this._usernameInputSelector);
         await userNameInput.type('qun.chen@hexagon.com');
         await userNameInput.press('Enter');
@@ -22,10 +23,11 @@ class LoginPage extends BasePage {
         await pswInput.type('Windows@chenqun');
         await pswInput.press('Enter');
         await this.page.locator(this._submitButtonSelector).click();
+        await this.page.waitForLoadState('networkidle');
+        return new HomePage(this.page);
     }
 
-    protected _validatePage(page: Page): void {
-        return;
+    protected async _validatePage(): Promise<void> {
     }
 }
 
