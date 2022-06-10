@@ -1,7 +1,7 @@
 import { Page } from '@playwright/test';
 
-import { BasePage } from './BasePage';
-import HomePage from './HomePage';
+import { BasePage } from '../BasePage';
+import HomePage from '../home-page/HomePage';
 
 class LoginPage extends BasePage {
     private _loginButtonSelector = 'button:has-text("LOGIN")';
@@ -27,8 +27,7 @@ class LoginPage extends BasePage {
         return new HomePage(this.page);
     }
 
-    protected async _validatePage(): Promise<void> {
-    }
+    protected async _validatePage(): Promise<void> {}
 }
 
 export default LoginPage;

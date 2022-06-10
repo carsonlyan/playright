@@ -1,6 +1,6 @@
-import { chromium, test } from '@playwright/test';
+import { chromium, test, expect } from '@playwright/test';
 
-import LoginPage from './pages/LoginPage';
+import LoginPage from '../pages/login-page/LoginPage';
 
 test('login browser', async () => {
     test.setTimeout(300*1000);
@@ -10,6 +10,10 @@ test('login browser', async () => {
     await page.goto('http://localhost:3000/');
     const loginPage = new LoginPage(page);
     const homePage = await loginPage.login();
+    await homePage.filter.init();
+    expect(homePage.filter.databanksCount).toEqual(9);
+    const firstDatabank = homePage.filter.dataBankNames[0];
+    expect(await homePage.filter.checkADatabank(firstDatabank)).toBeTruthy();
     // await loginPage.run();
     await page.waitForTimeout(60*1000);
 });

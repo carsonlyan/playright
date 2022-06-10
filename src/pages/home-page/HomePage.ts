@@ -1,11 +1,15 @@
 import { Page, Locator } from '@playwright/test';
 
-import { BasePage, InvalidPageException } from './BasePage';
+import Filter from './components/Filter';
+import { BasePage, InvalidPageException } from '../BasePage';
 
 class HomePage extends BasePage {
     private _title = 'Material Center NG';
+
+    public filter: Filter;
     constructor(page: Page) {
         super(page);
+        this.filter = new Filter(page);
     }
 
     protected async _validatePage(): Promise<void> {
