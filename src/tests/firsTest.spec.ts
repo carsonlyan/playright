@@ -2,7 +2,7 @@ import { chromium, test, expect } from '@playwright/test';
 
 import LoginPage from '../pages/login-page/LoginPage';
 
-test('login browser', async () => {
+test('test filter', async () => {
     test.setTimeout(300*1000);
     const browser = await chromium.launch({ headless: false });// a browser could have multiple contexts
     const context = await browser.newContext();// a context could have multiple pages, each context is isolated env
@@ -10,10 +10,13 @@ test('login browser', async () => {
     await page.goto('http://localhost:3000/');
     const loginPage = new LoginPage(page);
     const homePage = await loginPage.login();
-    await homePage.filter.init();
+    await homePage.initComps();
     expect(homePage.filter.databanksCount).toEqual(9);
     const firstDatabank = homePage.filter.dataBankNames[0];
-    expect(await homePage.filter.checkADatabank(firstDatabank)).toBeTruthy();
+    const databank = await homePage.filter.checkADatabank(firstDatabank);
+    await homePage.mainTable.init();
+    const pagination = await homePage.mainTable.getPagination();
+    expect(pagination.totalCount).toEqual(databank.count);
     // await loginPage.run();
     await page.waitForTimeout(60*1000);
 });

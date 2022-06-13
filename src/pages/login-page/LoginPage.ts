@@ -15,7 +15,6 @@ class LoginPage extends BasePage {
     }
 
     public async login(): Promise<HomePage> {
-        // await this.page.locator(this._loginButtonSelector).click();
         const userNameInput = this.page.locator(this._usernameInputSelector);
         await userNameInput.type('qun.chen@hexagon.com');
         await userNameInput.press('Enter');
@@ -23,7 +22,7 @@ class LoginPage extends BasePage {
         await pswInput.type('Windows@chenqun');
         await pswInput.press('Enter');
         await this.page.locator(this._submitButtonSelector).click();
-        await this.page.waitForLoadState('networkidle');
+        await this.page.waitForResponse((resp) => resp.url() === 'https://auth.dev.nexus.hexagon.com/oauth/token' && resp.status() === 200)
         return new HomePage(this.page);
     }
 

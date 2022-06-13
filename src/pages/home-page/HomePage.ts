@@ -1,15 +1,25 @@
 import { Page, Locator } from '@playwright/test';
 
 import Filter from './components/Filter';
+import MainTable from './components/MainTable';
 import { BasePage, InvalidPageException } from '../BasePage';
 
 class HomePage extends BasePage {
     private _title = 'Material Center NG';
 
-    public filter: Filter;
+    filter: Filter;
+    mainTable: MainTable;
     constructor(page: Page) {
         super(page);
         this.filter = new Filter(page);
+        this.mainTable = new MainTable(page);
+    }
+
+    public async initComps(): Promise<void> {
+        await Promise.all([
+            this.filter.init(),
+            this.mainTable.init()
+        ])
     }
 
     protected async _validatePage(): Promise<void> {

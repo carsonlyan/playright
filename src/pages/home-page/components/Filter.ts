@@ -22,15 +22,12 @@ class Filter {
     private _propertyListBoxLocator: Locator;
     private _propertyItemsLocator: Locator;
 
-    private _databanks: Databank[];
-    private _isInited: boolean;
+    private _databanks: Databank[] | undefined = undefined;
 
     page: Page;
 
     constructor(page: Page) {
         this.page = page;
-        this._databanks = [];
-        this._isInited = false;
 
         this._filterConfigSelectLocator = this.page.locator('div[data-testid="FilterConfig-GenericConfig"]');
         this._addFilterConfigButtonLocator = this.page.locator('span:has-text("Add new configuration")');
@@ -46,52 +43,57 @@ class Filter {
     }
 
     public async init(): Promise<void> {
+        await this.page.waitForResponse((resp) => resp.url() === 'http://mcng-develop.westeurope.cloudapp.azure.com/material-search/search/databanks/AllMaterials' && resp.status() === 200);
         await this._initDatabanks();
-        this._isInited = true;
-    }
-
-    private _checkIfInit(): void {
-        if (!this._isInited) {
-            throw new Error('It must call "init" function first of all.');
-        }
     }
 
     private async _initDatabanks(): Promise<void> {
         const databankItems = await this._databankItemsLocator.elementHandles();
+        this._databanks = [];
         for (let index=0; index<databankItems.length; index++) {
             const ele = databankItems[index];
             const innerText = await ele.innerText();
             const matchCount = innerText.match(/\((\d+)\)/);
-            const count = matchCount ? parseInt(matchCount[0]) : 0;
+            const count = matchCount ? parseInt(matchCount[1]) : 0;
             const name = innerText.split(' (')[0];
             this._databanks.push({ ele, count, name });
         }
     }
 
-    public async checkADatabank(name: string): Promise<boolean> {
+    public async checkADatabank(name: string): Promise<Databank> {
+        if (!this._databanks) {
+            throw new Error('this._databanks is not initialized yet.');
+        }
         const databank = this._databanks.find((o) => o.name === name);
         if (!databank) {
-            return new Promise((resolve) => resolve(false));
+            return new Promise((_, reject) => reject());
         }
         const checkbox = await databank.ele.$('input[type="checkbox"]');
         if (!checkbox) {
-            return new Promise((resolve) => resolve(false));
+            return new Promise((_, reject) => reject());
         }
         await checkbox.click()
-        return new Promise((reslove) => reslove(true));
+        return databank;
     }
 
     public get databanksCount(): number {
-        this._checkIfInit();
+        if (!this._databanks) {
+            throw new Error('this._databanks is not initialized yet.');
+        }
         return this._databanks.length;
     }
 
     public get dataBankNames(): string[] {
+        if (!this._databanks) {
+            throw new Error('this._databanks is not initialized yet.');
+        }
         return this._databanks.map((o) => o.name);
     }
 
     public get materialCount(): number {
-        this._checkIfInit();
+        if (!this._databanks) {
+            throw new Error('this._databanks is not initialized yet.');
+        }
         let resCount = 0;
         this._databanks.forEach((databank) => resCount += databank.count);
         return resCount;
