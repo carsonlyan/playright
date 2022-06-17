@@ -1,0 +1,12 @@
+6/15/2022
+browser: a browser could have multiple contexts
+context: a context could have multiple pages, each context is isolated env
+page: a page is the smallest unit, each page is a tag
+
+6/16/2022
+test.only: only run the tests marked with it
+
+6/17/2022
+There are two types of APIRequestContext:
+1) associated with a BrowserContext eg: test('xxx', async ({ request }) => void)
+2) isolated instance, create via apiRequest.newContext() eg: const request = await playwright.request.newContext()
