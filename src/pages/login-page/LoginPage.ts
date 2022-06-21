@@ -1,7 +1,6 @@
 import { Page } from '@playwright/test';
 
 import { BasePage } from '../BasePage';
-import HomePage from '../home-page/HomePage';
 
 class LoginPage extends BasePage {
     private _loginButtonSelector = 'button:has-text("LOGIN")';
@@ -14,16 +13,22 @@ class LoginPage extends BasePage {
         super(page);
     }
 
-    public async login(): Promise<HomePage> {
+    public async login(): Promise<boolean> {
         const userNameInput = this.page.locator(this._usernameInputSelector);
-        await userNameInput.type('qun.chen@hexagon.com');
-        await userNameInput.press('Enter');
-        const pswInput = this.page.locator(this._pswInputSelector);
-        await pswInput.type('Windows@chenqun');
-        await pswInput.press('Enter');
-        await this.page.locator(this._submitButtonSelector).click();
+        let isLogined = false;
+        if (await userNameInput.isVisible()) {
+            isLogined = true;
+            await userNameInput.type('qun.chen@hexagon.com');
+            await userNameInput.press('Enter');
+            const pswInput = await this.page.locator(this._pswInputSelector);
+            if (await pswInput.isVisible({ timeout: 5*1000 })) {
+                await pswInput.type('Windows@chenqun');
+                await pswInput.press('Enter');
+                await this.page.locator(this._submitButtonSelector).click();
+            }
+        }
         await this.page.waitForResponse((resp) => resp.url() === 'https://auth.dev.nexus.hexagon.com/oauth/token' && resp.status() === 200)
-        return new HomePage(this.page);
+        return isLogined;
     }
 
     protected async _validatePage(): Promise<void> {}

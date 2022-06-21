@@ -5,7 +5,7 @@ const USER = 'carsonlyan';
 
 // test.describe.configure({ mode: 'serial' });
 
-test.describe.only('git api tests', async () => {
+test.describe('git api tests', async () => {
     test.beforeAll(async ({ playwright, context, request }) => {
         // const apiContext = await playwright.request.newContext()
         const response = await request.post('/user/repos', {

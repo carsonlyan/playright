@@ -10,3 +10,7 @@ test.only: only run the tests marked with it
 There are two types of APIRequestContext:
 1) associated with a BrowserContext eg: test('xxx', async ({ request }) => void)
 2) isolated instance, create via apiRequest.newContext() eg: const request = await playwright.request.newContext()
+
+6/21/2022
+Each fixture has a setup and teardown phase separated by the await use() call in the fixture.
+Setup is executed before the fixture is used by the test/hook, and teardown is executed when the fixture will not be used by the test/hook anymore.
